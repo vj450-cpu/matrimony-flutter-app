@@ -1,0 +1,16 @@
+{"logTime": "1126/160050", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-26T16:00:50.024Z"}}
+{"logTime": "1126/164945", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-26T16:49:45.929Z"}}
+{"logTime": "1126/165052", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-26T16:50:52.319Z"}}
+{"logTime": "1126/174324", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-26T17:43:24.996Z"}}
+{"logTime": "1126/174408", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-26T17:44:08.147Z"}}
+{"logTime": "1126/175016", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-26T17:50:16.498Z"}}
+{"logTime": "1126/175052", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-26T17:50:52.861Z"}}
+{"logTime": "1126/175629", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-26T17:56:29.777Z"}}
+{"logTime": "1126/175746", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-26T17:57:46.133Z"}}
+{"logTime": "1126/180018", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-26T18:00:18.183Z"}}
+{"logTime": "1126/180214", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-26T18:02:14.738Z"}}
+{"logTime": "1126/180733", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-26T18:07:33.093Z"}}
+{"logTime": "1126/180811", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-26T18:08:11.957Z"}}
+{"logTime": "1126/180906", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-26T18:09:06.267Z"}}
+{"logTime": "1127/051549", {"lineNo":0,"logLevel":2,"message":"Migrate_Schedule: Spaceworks not enabled, ineligible for migration","source":"Workspace Migration","timestamp":"2025-11-27T05:15:49.806Z"}}
+{"logTime": "1127/051655", {"lineNo":0,"logLevel":2,"message":"WorkspaceManager: count of workspaces on close: 0","source":"Fluid Local Collaborator","timestamp":"2025-11-27T05:16:55.249Z"}}

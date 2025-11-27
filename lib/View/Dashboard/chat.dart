@@ -1,13 +1,16 @@
+import 'package:bright_weddings/View/Dashboard/dashboard_mob.dart';
+import 'package:bright_weddings/View/Matches/matches_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bright_weddings/View/Discover/discover_page.dart';
 import 'package:bright_weddings/View/Profile/ProfileDetails/profile_details.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'profile',
+      title: 'Messages',
       home: ChatPage(),
       debugShowCheckedModeBanner: false,
     );
@@ -19,17 +22,20 @@ class ChatPage extends StatefulWidget {
   _ChatPage createState() => _ChatPage();
 }
 
-class _ChatPage extends State<ChatPage> {
-  int _currentIndex = 0; // Track the index of the selected item
+class _ChatPage extends State<ChatPage> with SingleTickerProviderStateMixin {
+  int _currentIndex = 2; // Messages selected by default
+
+  late final AnimationController _bgController;
+
   final List<Map<String, dynamic>> groups = [
     {
-      "title": "group1",
+      "title": "Tamil Wedding Community",
       "time": "23 min ago",
       "members": 320,
       "highlight": true,
     },
     {
-      "title": "group2",
+      "title": "IT Professionals Group",
       "time": "12 min ago",
       "members": 180,
       "highlight": false,
@@ -37,198 +43,410 @@ class _ChatPage extends State<ChatPage> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5),
-      appBar: AppBar(
-        title: Text("Messages"),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex, // Track the selected index
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index; // Update the selected index
-          });
+  void initState() {
+    super.initState();
+    _bgController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    )..repeat(reverse: true);
+  }
 
-          // Use Get.to() for navigation
-          switch (index) {
-            case 0: // Home
-              // Already on home, no need to navigate
-              break;
-            case 1: // Matches
-              Get.to(() => DiscoverPage()); // 👈 Add this
-              break;
-            case 2: // Messages
-              Get.to(() => Chat());
-              break;
-            case 3: // Profile
-              Get.to(() => ProfileDetails());
-              break;
-            case 4: // Discover
-              Get.to(() => DiscoverPage());
-              break;
-          }
-        },
-        selectedItemColor:
-            Colors.redAccent, // Set the color for the selected item
-        unselectedItemColor:
-            Colors.grey, // Set the color for the unselected items
-        type: BottomNavigationBarType.fixed, // This allows more than 3 items
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+  @override
+  void dispose() {
+    _bgController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _bgController,
+      builder: (context, child) {
+        final color1 = Color.lerp(
+          const Color(0xFFFFE5EC),
+          const Color(0xFFE3F2FD),
+          _bgController.value,
+        )!;
+        final color2 = Color.lerp(
+          const Color(0xFFFFC1E3),
+          const Color(0xFFBBDEFB),
+          1 - _bgController.value,
+        )!;
+
+        return Scaffold(
+          extendBody: true,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.black,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFFFFE5EC),
+                    Color(0xFFFFC1E3),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            title: Row(
+              children: [
+                const Icon(Icons.message_outlined, size: 22),
+                const SizedBox(width: 8),
+                Text(
+                  "Messages",
+                  style: GoogleFonts.kodchasan(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {},
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Matches',
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [color1, color2],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Stack(
+              children: [
+                // Glowing circles for background
+                Positioned(
+                  top: -60,
+                  right: -30,
+                  child:
+                      _buildGlowCircle(110, Colors.white.withOpacity(0.25)),
+                ),
+                Positioned(
+                  bottom: -80,
+                  left: -20,
+                  child:
+                      _buildGlowCircle(150, Colors.white.withOpacity(0.2)),
+                ),
+                Positioned(
+                  top: 150,
+                  left: 0,
+                  child: _buildGlowCircle(70, Colors.white.withOpacity(0.15)),
+                ),
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Conversation Section
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Conversations",
+                              style: GoogleFonts.lato(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 19,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.9),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.06),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.shield_rounded,
+                                      size: 16, color: Colors.redAccent),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    "Safe & Secure",
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+
+                        _wrapInCard(
+                          child: Column(
+                            children: [
+                              _buildConversationTile(context),
+                              const SizedBox(height: 8),
+                              _buildConversationTile(context),
+                              const SizedBox(height: 8),
+                              _buildConversationTile(context),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+
+                        // Groups Section
+                        Text(
+                          "Community Groups",
+                          style: GoogleFonts.lato(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 19,
+                          ),
+                        ),
+                        const SizedBox(height: 9),
+                        Expanded(
+                          child: _wrapInCard(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 8),
+                            child: ListView.builder(
+                              itemCount: groups.length,
+                              itemBuilder: (context, index) {
+                                var group = groups[index];
+                                return _buildGroupTile(group);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined), // New button
-            label: 'Messages',
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFFFFE5EC),
+                  Color(0xFFE3F2FD),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 12,
+                  offset: const Offset(0, -4),
+                ),
+              ],
+            ),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              currentIndex: _currentIndex,
+              onTap: (index) {
+                if (index == _currentIndex) return;
+
+                setState(() {
+                  _currentIndex = index;
+                });
+
+                switch (index) {
+                  case 0: // Home
+                    Get.to(
+                      () => DashboardMob(),
+                      transition: Transition.leftToRightWithFade,
+                      duration: const Duration(milliseconds: 350),
+                    );
+                    break;
+                  case 1: // Matches
+                    Get.to(
+                      () => const MatchesPage(),
+                      transition: Transition.rightToLeftWithFade,
+                      duration: const Duration(milliseconds: 350),
+                    );
+                    break;
+                  case 2: // Messages
+                    // Already here
+                    break;
+                  case 3: // Profile
+                    Get.to(
+                      () => ProfileDetails(),
+                      transition: Transition.fadeIn,
+                      duration: const Duration(milliseconds: 300),
+                    );
+                    break;
+                  case 4: // Discover
+                    Get.to(
+                      () => DiscoverPage(),
+                      transition: Transition.zoom,
+                      duration: const Duration(milliseconds: 320),
+                    );
+                    break;
+                }
+              },
+              selectedItemColor: Colors.redAccent,
+              unselectedItemColor: Colors.grey,
+              type: BottomNavigationBarType.fixed,
+              selectedFontSize: 12,
+              unselectedFontSize: 11,
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home), label: 'Home'),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite_border),
+                  label: 'Matches',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.message_outlined),
+                  label: 'Messages',
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person), label: 'Profile'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.explore), label: 'Discover'),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Discover',
+        );
+      },
+    );
+  }
+
+  Widget _buildGlowCircle(double size, Color color) {
+    return AnimatedScale(
+      scale: 1 + (_bgController.value * 0.06),
+      duration: const Duration(milliseconds: 400),
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _wrapInCard({
+    required Widget child,
+    EdgeInsetsGeometry? padding,
+  }) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOutCubic,
+      padding: padding ?? const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.98),
+            Colors.white.withOpacity(0.92),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.7),
+          width: 0.6,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 12,
+            spreadRadius: 1,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: child,
+    );
+  }
+
+  Widget _buildConversationTile(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+      leading: const CircleAvatar(
+        radius: 25,
+        backgroundImage: AssetImage("assets/avatar.png"),
+      ),
+      title: Text(
+        "Seb",
+        style: GoogleFonts.lato(fontWeight: FontWeight.w600),
+      ),
+      subtitle: const Text(
+        "That’s wonderful. I feel the same way as well. 😊",
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "09:45",
+            style: TextStyle(fontSize: 11, color: Colors.grey),
+          ),
+          const SizedBox(height: 4),
+          CircleAvatar(
+            radius: 10,
+            backgroundColor: Colors.redAccent,
+            child: const Text(
+              "2",
+              style: TextStyle(color: Colors.white, fontSize: 11),
+            ),
+          ),
+        ],
+      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => ChatDetailScreen()),
+        );
+      },
+    );
+  }
+
+  Widget _buildGroupTile(Map<String, dynamic> group) {
+    final highlight = group["highlight"] as bool;
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      color: highlight
+          ? const Color(0xFFE3F2FD)
+          : Colors.white.withOpacity(0.98),
+      child: ListTile(
+        title: Text(
+          group["title"],
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.lato(
+            fontWeight: highlight ? FontWeight.bold : FontWeight.w500,
+          ),
+        ),
+        subtitle: Text(
+          group["time"],
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            /// Conversation Section
-            Text(
-              "Conversation",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                radius: 25,
-                backgroundImage: AssetImage("assets/avatar.png"),
+            const Icon(Icons.group, size: 22),
+            const SizedBox(width: 6),
+            Text("${group["members"]}+"),
+            if (highlight)
+              const Padding(
+                padding: EdgeInsets.only(left: 4.0),
+                child: Icon(Icons.star, color: Colors.amber, size: 18),
               ),
-              title: Text("Seb"),
-              subtitle:
-                  Text("That’s wonderful. I feel the same way as well. 😊"),
-              trailing: CircleAvatar(
-                radius: 12,
-                backgroundColor: Colors.blue,
-                child: Text(
-                  "2",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ChatDetailScreen()),
-                );
-              },
-            ),
-            SizedBox(height: 10),
-
-            //
-
-            ListTile(
-              leading: CircleAvatar(
-                radius: 25,
-                backgroundImage: AssetImage("assets/avatar.png"),
-              ),
-              title: Text("Seb"),
-              subtitle:
-                  Text("That’s wonderful. I feel the same way as well. 😊"),
-              trailing: CircleAvatar(
-                radius: 12,
-                backgroundColor: Colors.blue,
-                child: Text(
-                  "2",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ChatDetailScreen()),
-                );
-              },
-            ),
-            SizedBox(height: 10),
-
-            //
-
-            ListTile(
-              leading: CircleAvatar(
-                radius: 25,
-                backgroundImage: AssetImage("assets/avatar.png"),
-              ),
-              title: Text("Seb"),
-              subtitle:
-                  Text("That’s wonderful. I feel the same way as well. 😊"),
-              trailing: CircleAvatar(
-                radius: 12,
-                backgroundColor: Colors.blue,
-                child: Text(
-                  "2",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ChatDetailScreen()),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-
-            /// Groups Section
-            Text(
-              "community groups",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-            ),
-            SizedBox(height: 9),
-            Expanded(
-              child: ListView.builder(
-                itemCount: groups.length,
-                itemBuilder: (context, index) {
-                  var group = groups[index];
-                  return Card(
-                    color: group["highlight"] ? Colors.blue[50] : Colors.white,
-                    child: ListTile(
-                      title: Text(
-                        group["title"],
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontWeight: group["highlight"]
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                      ),
-                      subtitle: Text(group["time"]),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.group, size: 28),
-                          SizedBox(width: 9),
-                          Text("${group["members"]}+"),
-                          if (group["highlight"])
-                            Icon(Icons.star, color: Colors.amber, size: 18),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
           ],
         ),
       ),
@@ -285,74 +503,117 @@ class ChatDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFFFFE5EC),
+                Color(0xFFFFC1E3),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: Row(
-          children: [
+          children: const [
             CircleAvatar(backgroundImage: AssetImage("assets/avatar.png")),
             SizedBox(width: 10),
             Text("Seb"),
           ],
         ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(12),
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                var msg = messages[index];
-                return Align(
-                  alignment: msg["isMe"]
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.all(12),
-                    constraints: BoxConstraints(maxWidth: 250),
-                    decoration: BoxDecoration(
-                      color: msg["isMe"] ? Colors.blue : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(16),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFFFE5EC),
+              Color(0xFFE3F2FD),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  var msg = messages[index];
+                  final isMe = msg["isMe"] as bool;
+                  return Align(
+                    alignment: isMe
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.all(12),
+                      constraints: const BoxConstraints(maxWidth: 280),
+                      decoration: BoxDecoration(
+                        color: isMe
+                            ? Colors.redAccent
+                            : Colors.white.withOpacity(0.95),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(isMe ? 16 : 4),
+                          topRight: Radius.circular(isMe ? 4 : 16),
+                          bottomLeft: const Radius.circular(16),
+                          bottomRight: const Radius.circular(16),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        msg["text"],
+                        style: TextStyle(
+                          color: isMe ? Colors.white : Colors.black87,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
-                    child: Text(
-                      msg["text"],
-                      style: TextStyle(
-                        color: msg["isMe"] ? Colors.white : Colors.black87,
+                  );
+                },
+              ),
+            ),
+            const Divider(height: 1),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              color: Colors.white.withOpacity(0.95),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.add_circle_outline,
+                        color: Colors.redAccent),
+                    onPressed: () {},
+                  ),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Type your message...",
+                        hintStyle: const TextStyle(fontSize: 14),
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
-                );
-              },
-            ),
-          ),
-          Divider(height: 1),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            color: Colors.white,
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.add_circle_outline, color: Colors.blue),
-                  onPressed: () {},
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Type your message...",
-                      border: InputBorder.none,
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.send, color: Colors.redAccent),
+                    onPressed: () {},
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send, color: Colors.blue),
-                  onPressed: () {},
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

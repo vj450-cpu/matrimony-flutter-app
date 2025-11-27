@@ -1,3 +1,4 @@
+import 'package:bright_weddings/View/Matches/matches_page.dart';
 import 'package:bright_weddings/View/Profile/ProfileDetails/profile_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  int _currentIndex = 2; 
+  int _currentIndex = 4; 
   final List<Map<String, String>> profiles = [
     {
       "name": "Nandana",
@@ -97,7 +98,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
       appBar: AppBar(
         title: Text("Discover Matches"),
         centerTitle: true,
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: const Color.fromARGB(255, 255, 82, 82),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -221,50 +222,47 @@ class _DiscoverPageState extends State<DiscoverPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex, // Track the selected index
+        currentIndex: _currentIndex,
         onTap: (index) {
+          if (index == _currentIndex) return; // ✅ avoid re-navigating to same page
+
           setState(() {
-            _currentIndex = index; // Update the selected index
+            _currentIndex = index;
           });
 
-          // Use Get.to() for navigation
           switch (index) {
             case 0: // Home
-              Get.off(() =>
-                  DashboardMob()); // Use Get.off to remove the current page from the stack
+              Get.to(() => DashboardMob());
               break;
-            case 1: // Matches
-              Get.off(() = ()); // Replace with your Matches screen
+            case 1: 
+              Get.to(() => MatchesPage());
               break;
-            case 2: // New Button
-              Get.off(() => Chat()); // Replace with your NewScreen
+            case 2: // Messages
+              Get.to(() => Chat());
               break;
             case 3: // Profile
-              Get.off(() => ProfileDetails()); // Navigates to ProfileDetails
+              Get.to(() => ProfileDetails());
+              break;
+            case 4: // Discover
+              // Already on Discover, do nothing
               break;
           }
         },
-        selectedItemColor:
-            Colors.redAccent, // Set the color for the selected item
-        unselectedItemColor:
-            Colors.grey, // Set the color for the unselected items
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+        selectedItemColor: Colors.redAccent,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border),
             label: 'Matches',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined), // New button
+            icon: Icon(Icons.message_outlined),
             label: 'Messages',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Discover'),
         ],
       ),
     );

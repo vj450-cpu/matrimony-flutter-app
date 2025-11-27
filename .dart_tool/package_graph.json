@@ -211,14 +211,6 @@
       ]
     },
     {
-      "name": "get",
-      "version": "4.7.2",
-      "dependencies": [
-        "flutter",
-        "web"
-      ]
-    },
-    {
       "name": "async",
       "version": "2.13.0",
       "dependencies": [
@@ -977,6 +969,14 @@
       "name": "synchronized",
       "version": "3.4.0",
       "dependencies": []
+    },
+    {
+      "name": "get",
+      "version": "4.7.3",
+      "dependencies": [
+        "flutter",
+        "web"
+      ]
     }
   ],
   "configVersion": 1
